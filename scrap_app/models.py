@@ -1,4 +1,5 @@
 from django.db import models
+from scrap_app.utils import from_cyrillic_to_latinic
 
 
 class City(models.Model):
@@ -13,6 +14,11 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = from_cyrillic_to_latinic(str(self.name))
+        super().save(*args, **kwargs)
 
 
 class Language(models.Model):
@@ -27,3 +33,8 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = from_cyrillic_to_latinic(str(self.name))
+        super().save(*args, **kwargs)
