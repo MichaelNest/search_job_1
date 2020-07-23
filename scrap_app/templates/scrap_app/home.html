@@ -17,16 +17,21 @@
   {% endfor %}
 
 <form method='GET' action="">
-  <label for="cname">Город:</label>
-  <br>
-  <input type="text" name="city" id="cname">
-  <br> <br>
-  <label for="lname">Специальность:</label>
-  <br>
-  <input type="text" name="language" id="lname">
-  <br> <br>
+  {{ form.as_p }}
   <input type="submit" value="Submit">
 </form>
+
+<!--<form method='GET' action="">-->
+<!--  <label for="cname">Город:</label>-->
+<!--  <br>-->
+<!--  <input type="text" name="city" id="cname">-->
+<!--  <br> <br>-->
+<!--  <label for="lname">Специальность:</label>-->
+<!--  <br>-->
+<!--  <input type="text" name="language" id="lname">-->
+<!--  <br> <br>-->
+<!--  <input type="submit" value="Submit">-->
+<!--</form>-->
 
 <!--<form action="https://google.com/search">-->
 <!--  <label for="fname">Город:</label>-->
