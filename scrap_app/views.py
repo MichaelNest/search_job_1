@@ -3,7 +3,7 @@ from .models import Vacantion
 from .forms import FindForm
 
 def home_view(request):
-    # print(request.GET)
+    print(request.GET)
     form = FindForm()
     city = request.GET.get('city')
     language = request.GET.get('language')
