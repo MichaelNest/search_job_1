@@ -1,5 +1,12 @@
 from scrap_app.parser import *
 import codecs
+import os, sys
+
+proj = os.path.dirname(os.path.abspath('manage.py'))
+sys.path.append(proj)
+os.environ['DJANGO_SETTINGS_MODULE'] = 'search_main.settings'
+import django
+django.setup()
 
 parsers = ((work, 'https://www.work.ua/jobs-kyiv-python/'),
            (rabota, 'https://rabota.ua/jobsearch/vacancy_list?keyWords=Python&regionId=1'),
