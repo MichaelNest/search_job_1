@@ -14,11 +14,17 @@ from scrap_app.models import City, Language, Vacantion, Error, Url
 
 User = get_user_model()
 
-parsers = ((work, 'https://www.work.ua/jobs-kyiv-python/'),
-           (rabota, 'https://rabota.ua/jobsearch/vacancy_list?keyWords=Python&regionId=1'),
-           (dou, 'https://jobs.dou.ua/vacancies/?city=%D0%A5%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2&category=Python'),
-           (djinni, 'https://djinni.co/jobs/?location=%D0%9A%D0%B8%D0%B5%D0%B2&primary_keyword=Python')
+# parsers = ((work, 'https://www.work.ua/jobs-kyiv-python/'),
+#            (rabota, 'https://rabota.ua/jobsearch/vacancy_list?keyWords=Python&regionId=1'),
+#            (dou, 'https://jobs.dou.ua/vacancies/?city=%D0%A5%D0%B0%D1%80%D1%8C%D0%BA%D0%BE%D0%B2&category=Python'),
+#            (djinni, 'https://djinni.co/jobs/?location=%D0%9A%D0%B8%D0%B5%D0%B2&primary_keyword=Python')
+#            )
+parsers = ((work, 'work'),
+           (rabota, 'rabota'),
+           (dou, 'dou'),
+           (djinni, 'djinni')
            )
+
 
 def get_settings():
     qs = User.objects.filter(send_email=True).values()
@@ -37,19 +43,29 @@ def get_urls(_settings):
         urls.append(tmp)
     return urls
 
-city = City.objects.filter(slug='kiev').first()
-language = Language.objects.filter(slug='python').first()
-jobs, error = [], []
+settings = get_settings()
+url_list =  get_urls(settings)
 
-for func, url in parsers:
-    j, e = func(url)
-    jobs.append(j)
-    error.append(e)
+# city = City.objects.filter(slug='kiev').first()
+# language = Language.objects.filter(slug='python').first()
+
+jobs, error = [], []
+for data in url_list:
+    for func, key in parsers:
+        url = data['url_data'][key]
+        j, e = func(url, city=data['city'], language=data['language'])
+        jobs.append(j)
+        error.append(e)
+# for func, url in parsers:
+#     j, e = func(url)
+#     jobs.append(j)
+#     error.append(e)
 
 for job in jobs:
     for jb in job:
         # if jb != '\n\n':
-        v = Vacantion(**jb, city=city, language=language)
+        v = Vacantion(**jb)
+        # v = Vacantion(**jb, city=city, language=language)
         try:
             v.save()
         except DatabaseError:
