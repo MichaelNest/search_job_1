@@ -10,7 +10,7 @@ import django
 django.setup()
 from django.db import DatabaseError
 from scrap_app.parser import *
-from scrap_app.models import City, Language, Vacantion, Error
+from scrap_app.models import City, Language, Vacantion, Error, Url
 
 User = get_user_model()
 
@@ -22,8 +22,20 @@ parsers = ((work, 'https://www.work.ua/jobs-kyiv-python/'),
 
 def get_settings():
     qs = User.objects.filter(send_email=True).values()
-    settings_lst = set((q['city_id'], q['language_id']) for q in qs)
-    return settings_lst
+    settings_list = set((q['city_id'], q['language_id']) for q in qs)
+    return settings_list
+
+def get_urls(_settings):
+    qs = Url.objects.all().values()
+    url_dict = {(q['city_id'], q['language_id']): q['url_data'] for q in qs}
+    urls = []
+    for pair in _settings:
+        tmp = {}
+        tmp['city'] = pair[0]
+        tmp['language'] = pair[1]
+        tmp['url_data'] = url_dict[pair]
+        urls.append(tmp)
+    return urls
 
 city = City.objects.filter(slug='kiev').first()
 language = Language.objects.filter(slug='python').first()
