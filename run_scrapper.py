@@ -8,7 +8,7 @@ import django
 django.setup()
 from django.db import DatabaseError
 from scrap_app.parser import *
-from scrap_app.models import City, Language, Vacantion
+from scrap_app.models import City, Language, Vacantion, Error
 
 parsers = ((work, 'https://www.work.ua/jobs-kyiv-python/'),
            (rabota, 'https://rabota.ua/jobsearch/vacancy_list?keyWords=Python&regionId=1'),
@@ -32,6 +32,8 @@ for job in jobs:
             v.save()
         except DatabaseError:
             pass
+if error:
+    er = Error(data=error).save()
 #
 # f = codecs.open('jobs.txt', 'w', 'utf-8')
 # for a in jobs:
