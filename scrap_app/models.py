@@ -1,3 +1,4 @@
+import jsonfield
 from django.db import models
 from scrap_app.utils import from_cyrillic_to_latinic
 
@@ -54,3 +55,7 @@ class Vacantion(models.Model):
         
     def __str__(self):
         return self.title
+
+class Error(models.Model):
+    datestamp = models.DateField(auto_now_add=True)
+    data = jsonfield.JSONField()
