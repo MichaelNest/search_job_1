@@ -68,7 +68,7 @@ class Error(models.Model):
 class Url(models.Model):
     city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Город')
     language = models.ForeignKey('Language', on_delete=models.CASCADE, verbose_name='Язык программирования')
-    data = jsonfield.JSONField(default=default_urls)
+    url_data = jsonfield.JSONField(default=default_urls)
     
     class Meta:
         unique_together = ('city', 'language')
