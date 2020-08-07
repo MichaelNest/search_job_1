@@ -5,13 +5,30 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col"><h2>Сервис по збору и рассылке вакансий</h2></div>
-</div>
+  {% for obj in object_list %}
+    <div class="card my-3">
+      <h5 class="card-header"><a href="{{obj.url}}">{{obj.title}}</a></h5>
+      <div class="card-body">
+        <h4>{{ obj.company }}</h4>
+        <p class="card-text">{{obj.description}}</p>
+        <p>{{obj.city.name}} | {{obj.language.name}} | <small>{{obj.datestamp|date:"d-m-Y"}}</small> </p>
+      </div>
+    </div>
+
+  {% empty %}
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <h3>К сожалению по Вашему запросу ничего не найдено!!</h3>
+      </div>
+    </div>
+
+
+  {% endfor %}
+
+
     <div class="row ">
       <div class="col-md-4 mx-auto">
-        <h4>Для просмотра списка доступных вакансий - заполните хотя б одно поле</h4>
-          <form method='GET' action="{% url 'list' %}">
+          <form method='GET' action="">
             <div class="form-group">
               {{ form.as_p }}
             </div>
